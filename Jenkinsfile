@@ -9,7 +9,7 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh 'kubectl create -f controller.yaml'
+                sh 'kubectl create -f ./manifest/controller.yaml'
             }
         }
     }
