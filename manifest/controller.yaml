@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: test-demo
-          image: 172.31.78.217:5000/test-demo:v1
+          image: 172.31.78.217:5000/test-demo:v2
           command: ["/entrypoint.sh"]
           resources:
             requests:

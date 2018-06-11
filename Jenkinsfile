@@ -3,8 +3,8 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'docker build -t 172.31.78.217:5000/test-demo:v1 .'
-                sh 'docker push 172.31.78.217:5000/test-demo:v1'
+                sh 'docker build -t 172.31.78.217:5000/test-demo:v2 .'
+                sh 'docker push 172.31.78.217:5000/test-demo:v2'
             }
         }
         stage('deploy') {
