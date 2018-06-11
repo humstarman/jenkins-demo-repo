@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                kubectl create -f ./. 
+                sh 'kubectl create -f ./.'
             }
         }
     }
