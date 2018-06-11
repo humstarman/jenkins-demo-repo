@@ -1,3 +1,3 @@
 FROM ubuntu:16.04
-ADD entrypoint /
+ADD entrypoint.sh /
 RUN chmod +x /entrypoint.sh 
