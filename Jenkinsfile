@@ -9,7 +9,7 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh 'if kubectl -n defaul get pod | grep test-demo; then kubectl delete -f ./manifest/controller.yaml; fi'
+                sh 'if kubectl -n default get pod | grep test-demo; then kubectl delete -f ./manifest/controller.yaml; fi'
                 sh 'kubectl create -f ./manifest/controller.yaml'
             }
         }
