@@ -3,7 +3,13 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'kubectl create -f ./.'
+                sh 'docker build -t 172.31.78.217:5000/test-demo:v1 .'
+                sh 'docker push 172.31.78.217:5000/test-demo:v1'
+            }
+        }
+        stage('deploy') {
+            steps {
+                sh 'kubectl create -f controller.yaml'
             }
         }
     }

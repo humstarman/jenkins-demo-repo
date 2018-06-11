@@ -1,0 +1,27 @@
+kind: Deployment 
+apiVersion: extensions/v1beta1
+metadata:
+  namespace: default 
+  name: test-demo-controller
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: test-demo
+    spec:
+      containers:
+        - name: test-demo
+          image: 172.31.78.217:5000/test-demo:v1
+          command: ["/entrypoint.sh"]
+          resources:
+            requests:
+              cpu: 100m
+          volumeMounts:
+            - name: host-time
+              mountPath: /etc/localtime
+              readOnly: true
+      volumes:
+        - name: host-time
+          hostPath:
+            path: /etc/localtime
