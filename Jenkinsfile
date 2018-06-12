@@ -2,7 +2,7 @@ pipeline {
     agent any 
     parameters {
         string(name: 'project', defaultValue: 'test-demo', description: 'the name of the project')
-        string(name: 'tag', defaultValue: 'v3', description: 'the tag of the docker image')
+        string(name: 'tag', defaultValue: 'v0', description: 'the tag of the docker image')
         string(name: 'local_registry', defaultValue: '172.31.78.217:5000', description: 'local docker registry')
         string(name: 'namespace', defaultValue: 'default', description: 'the namespace of the project')
         string(name: 'n', defaultValue: '0', description: 'the number to echo')
