@@ -8,10 +8,10 @@ pipeline {
         string(name: 'n', defaultValue: '0', description: 'the number to echo')
     }
     environment {
-        PROJECT = {params.project}
-        TAG = {params.tag}
-        LOCAL_REGISTRY = {params.local_registry}
-        NAMESPACE = {params.namespace}
+        PROJECT = ${params.project}
+        TAG = ${params.tag}
+        LOCAL_REGISTRY = ${params.local_registry}
+        NAMESPACE = ${params.namespace}
         NUM = {params.n}
     }
     stages {
