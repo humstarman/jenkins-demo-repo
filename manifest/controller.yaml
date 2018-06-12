@@ -1,18 +1,18 @@
 kind: Deployment 
 apiVersion: extensions/v1beta1
 metadata:
-  namespace: default 
-  name: test-demo-controller
+  namespace: {{.namespace}} 
+  name: {{.project}}-controller
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        component: test-demo
+        component: {{.project}}
     spec:
       containers:
-        - name: test-demo
-          image: 172.31.78.217:5000/test-demo:v2
+        - name: {{.project}}
+          image: {{.local.registry}}/{{.project}}:{{.tag}}
           command: ["/entrypoint.sh"]
           resources:
             requests:
