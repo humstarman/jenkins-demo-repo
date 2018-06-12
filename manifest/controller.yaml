@@ -13,6 +13,7 @@ spec:
       containers:
         - name: {{.project}}
           image: {{.local.registry}}/{{.project}}:{{.tag}}
+          imagePullPolicy: Always
           command: ["/entrypoint.sh"]
           env:
             - name: NUM
