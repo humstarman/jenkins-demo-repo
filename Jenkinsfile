@@ -31,6 +31,7 @@ pipeline {
                 sh "sed -i s/\"{{.project}}\"/\"${params.project}\"/g ./manifest/controller.yaml"
                 sh "sed -i s/\"{{.local.registry}}\"/\"${params.local_registry}\"/g ./manifest/controller.yaml"
                 sh "sed -i s/\"{{.tag}}\"/\"${params.tag}\"/g ./manifest/controller.yaml"
+                sh "sed -i s/\"{{.num}}\"/\"${params.num}\"/g ./manifest/controller.yaml"
                 sh "if kubectl -n ${params.namespace} get pod | grep ${params.project}; then kubectl delete -f ./manifest/controller.yaml; fi"
                 sh 'kubectl create -f ./manifest/controller.yaml'
             }

@@ -21,6 +21,9 @@ spec:
             - name: host-time
               mountPath: /etc/localtime
               readOnly: true
+          env:
+            - name: NUM
+              value: {{.num}}
       volumes:
         - name: host-time
           hostPath:
