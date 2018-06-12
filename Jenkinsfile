@@ -19,10 +19,10 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh "sed -i s/{{.namespace}}/${params.NAMESPACE}/g ./manifest/controller.yaml"
-                sh "sed -i s/{{.project}}/${params.PROJECT}/g ./manifest/controller.yaml"
-                sh "sed -i s/{{.local.registry}}/${params.LOCAL_REGISTRY}/g ./manifest/controller.yaml"
-                sh "sed -i s/{{.tag}}/${params.TAG}/g ./manifest/controller.yaml"
+                sh "sed -i s/"{{.namespace}}"/"${params.NAMESPACE}"/g ./manifest/controller.yaml"
+                sh "sed -i s/"{{.project}}"/"${params.PROJECT}"/g ./manifest/controller.yaml"
+                sh "sed -i s/"{{.local.registry}}"/"${params.LOCAL_REGISTRY}"/g ./manifest/controller.yaml"
+                sh "sed -i s/"{{.tag}}"/"${params.TAG}"/g ./manifest/controller.yaml"
                 sh "if kubectl -n ${params.NAMESPACE} get pod | grep ${params.PROJECT}; then kubectl delete -f ./manifest/controller.yaml; fi"
                 sh 'kubectl create -f ./manifest/controller.yaml'
             }
