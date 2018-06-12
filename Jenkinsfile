@@ -12,7 +12,7 @@ pipeline {
         TAG = ${params.tag}
         LOCAL_REGISTRY = ${params.local_registry}
         NAMESPACE = ${params.namespace}
-        NUM = {params.n}
+        NUM = ${params.n}
     }
     stages {
         stage('build') {
