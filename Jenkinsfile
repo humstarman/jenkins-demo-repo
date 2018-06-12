@@ -8,7 +8,7 @@ pipeline {
     }
     stages {
         stage('build') {
-            timeout(time: 3, unit: 'MINUTES')    
+            timeout(time: 3, unit: 'MINUTES') {   
                 retry(5) {
                     steps {
                         sh "docker build -t ${params.LOCAL_REGISTRY}/${params.PROJECT}:${params.TAG} ."
@@ -16,6 +16,7 @@ pipeline {
                     }
                 }
             }
+        }
         stage('deploy') {
             steps {
                 sh "sed -i s/{{.namespace}}/${params.NAMESPACE}/g ./manifest/controller.yaml"
