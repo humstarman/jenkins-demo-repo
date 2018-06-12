@@ -1,29 +1,35 @@
 pipeline {
     agent any 
     parameters {
-        string(name: 'PROJECT', defaultValue: 'test-demo', description: 'the name of the project')
-        string(name: 'TAG', defaultValue: 'v3', description: 'the tag of the docker image')
-        string(name: 'LOCAL_REGISTRY', defaultValue: '172.31.78.217:5000', description: 'local docker registry')
-        string(name: 'NAMESPACE', defaultValue: 'default', description: 'the namespace of the project')
+        string(name: 'project', defaultValue: 'test-demo', description: 'the name of the project')
+        string(name: 'tag', defaultValue: 'v3', description: 'the tag of the docker image')
+        string(name: 'local_registry', defaultValue: '172.31.78.217:5000', description: 'local docker registry')
+        string(name: 'namespace', defaultValue: 'default', description: 'the namespace of the project')
+    }
+    environment {
+        PROJECT = {params.project}
+        TAG = {params.tag}
+        LOCAL_REGISTRY = {params.local_registry}
+        NAMESPACE = {params.namespace}
     }
     stages {
         stage('build') {
             steps {
                 timeout(time: 3, unit: 'MINUTES') {   
                     retry(5) {
-                        sh "docker build -t ${params.LOCAL_REGISTRY}/${params.PROJECT}:${params.TAG} ."
+                        sh "docker build -t ${params.local_registry}/${params.project}:${params.tag} ."
                     }
                 }
-                sh "docker push ${params.LOCAL_REGISTRY}/${params.PROJECT}:${params.TAG}"
+                sh "docker push ${params.local_registry}/${params.project}:${params.tag}"
             }
         }
         stage('deploy') {
             steps {
-                sh "sed -i s/\"{{.namespace}}\"/\"${params.NAMESPACE}\"/g ./manifest/controller.yaml"
-                sh "sed -i s/\"{{.project}}\"/\"${params.PROJECT}\"/g ./manifest/controller.yaml"
-                sh "sed -i s/\"{{.local.registry}}\"/\"${params.LOCAL_REGISTRY}\"/g ./manifest/controller.yaml"
-                sh "sed -i s/\"{{.tag}}\"/\"${params.TAG}\"/g ./manifest/controller.yaml"
-                sh "if kubectl -n ${params.NAMESPACE} get pod | grep ${params.PROJECT}; then kubectl delete -f ./manifest/controller.yaml; fi"
+                sh "sed -i s/\"{{.namespace}}\"/\"${params.namespace}\"/g ./manifest/controller.yaml"
+                sh "sed -i s/\"{{.project}}\"/\"${params.project}\"/g ./manifest/controller.yaml"
+                sh "sed -i s/\"{{.local.registry}}\"/\"${params.local_registry}\"/g ./manifest/controller.yaml"
+                sh "sed -i s/\"{{.tag}}\"/\"${params.tag}\"/g ./manifest/controller.yaml"
+                sh "if kubectl -n ${params.namespace} get pod | grep ${params.project}; then kubectl delete -f ./manifest/controller.yaml; fi"
                 sh 'kubectl create -f ./manifest/controller.yaml'
             }
         }
