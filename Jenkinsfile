@@ -15,7 +15,7 @@ pipeline {
         NUM = "${params.n}"
     }
     stages {
-        stage('build') {
+        stage('Build') {
             steps {
                 timeout(time: 3, unit: 'MINUTES') {   
                     retry(5) {
@@ -25,7 +25,7 @@ pipeline {
                 sh "docker push ${params.local_registry}/${params.project}:${params.tag}"
             }
         }
-        stage('deploy') {
+        stage('Deploy - Staging') {
             steps {
                 sh "sed -i s/\"{{.namespace}}\"/\"${params.namespace}\"/g ./manifest/controller.yaml"
                 sh "sed -i s/\"{{.project}}\"/\"${params.project}\"/g ./manifest/controller.yaml"
@@ -33,23 +33,28 @@ pipeline {
                 sh "sed -i s/\"{{.tag}}\"/\"${params.tag}\"/g ./manifest/controller.yaml"
                 sh "sed -i s/\"{{.num}}\"/\"${params.n}\"/g ./manifest/controller.yaml"
                 sh "if kubectl -n ${params.namespace} get pod | grep ${params.project}; then kubectl delete -f ./manifest/controller.yaml; fi"
+            }
+        }
+        stage('Sanity check') {
+            steps {
+                input "Does the staging environment look ok?"
+            }
+        }
+        stage('Deploy - Production') {
+            steps {
                 sh 'kubectl create -f ./manifest/controller.yaml'
             }
         }
     }
     post {
         always {
-            mail to: 'sinaawp@163.com',
-                 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-                 body: "Something is wrong with ${env.BUILD_URL}"
+            echo 'This will always run'
         }
         success {
             echo 'This will run only if successful'
         }
         failure {
-            mail to: 'sinaawp@163.com',
-                 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-                 body: "Something is wrong with ${env.BUILD_URL}"
+            echo 'This will run only if failed'
         }
         unstable {
             echo 'This will run only if the run was marked as unstable'
@@ -57,6 +62,7 @@ pipeline {
         changed {
             echo 'This will run only if the state of the Pipeline has changed'
             echo 'For example, if the Pipeline was previously failing but is now successful'
+        }
         }
     }
 }
