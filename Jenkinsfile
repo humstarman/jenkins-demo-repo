@@ -9,8 +9,8 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'docker build -t ${LOCAL_REGISTRY}/${PROJECT}:${TAG} .'
-                sh 'docker push -t ${LOCAL_REGISTRY}/${PROJECT}:${TAG}'
+                sh "docker build -t ${LOCAL_REGISTRY}/${PROJECT}:${TAG} ."
+                sh "docker push -t ${LOCAL_REGISTRY}/${PROJECT}:${TAG}"
             }
         }
         stage('deploy') {
