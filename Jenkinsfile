@@ -8,13 +8,13 @@ pipeline {
     }
     stages {
         stage('build') {
-            timeout(time: 3, unit: 'MINUTES') {   
-                retry(5) {
-                    steps {
+            steps {
+                timeout(time: 3, unit: 'MINUTES') {   
+                    retry(5) {
                         sh "docker build -t ${params.LOCAL_REGISTRY}/${params.PROJECT}:${params.TAG} ."
-                        sh "docker push ${params.LOCAL_REGISTRY}/${params.PROJECT}:${params.TAG}"
                     }
                 }
+                sh "docker push ${params.LOCAL_REGISTRY}/${params.PROJECT}:${params.TAG}"
             }
         }
         stage('deploy') {
